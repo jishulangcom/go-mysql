@@ -11,6 +11,10 @@ import (
 var DB *sqlx.DB
 
 func NewDB(conf *config.MysqlCnfDto) *sqlx.DB {
+	if conf.Charset == "" {
+		conf.Charset = "utf8mb4"
+	}
+
 	var err error
 	url := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s", conf.User, conf.Pwd, conf.Host, conf.Port, conf.DbName, conf.Charset)
 	db, err := sqlx.Open("mysql", url)
