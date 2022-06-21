@@ -3,33 +3,26 @@ package mysql
 import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/jinzhu/gorm"
 	"github.com/jishulangcom/go-config"
-	"github.com/jmoiron/sqlx"
-	"os"
 )
 
-var DB *sqlx.DB
+//单例，开启事务时用这个db(models.db)db.Begin(),db.Rollback(),db.Commit()
+var DB *gorm.DB
 
-func NewDB(conf *config.MysqlCnfDto) *sqlx.DB {
-	if conf.Charset == "" {
-		conf.Charset = "utf8mb4"
-	}
+//连接数据库，创建表
+func NewDB(conf *config.MysqlCnfDto) {
+	url := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s", conf.User, conf.Pwd, conf.Host, conf.Port, conf.DbName, conf.Charset)
+	// database_connect_string := "root:root@/jsl-share?charset=utf8mb4&parseTime=True&loc=Local"
 
 	var err error
-	url := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s", conf.User, conf.Pwd, conf.Host, conf.Port, conf.DbName, conf.Charset)
-	db, err := sqlx.Open("mysql", url)
+	//打开数据库链接，返回db实例
+	DB, err = gorm.Open("mysql", url)
 	if err != nil {
 		panic("mysql 连接失败")
-		os.Exit(1)
 	}
 
-	if err = db.Ping(); err != nil {
-		panic("mysql 连接失败")
-		os.Exit(1)
-	}
-
-	DB = db
-	return db
+	// DB.SingularTable(true) //取消建表时的表名自动添加“s”
 }
 
 func CloseDB() {
