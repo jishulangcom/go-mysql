@@ -21,8 +21,9 @@ func NewDB(conf *config.MysqlCnfDto) {
 	if err != nil {
 		panic("mysql 连接失败")
 	}
-
-	// DB.SingularTable(true) //取消建表时的表名自动添加“s”
+	
+	DB.LogMode(conf.Debug)
+	DB.SingularTable(true) //取消建表时的表名自动添加“s”
 }
 
 func CloseDB() {
