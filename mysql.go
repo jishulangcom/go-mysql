@@ -12,7 +12,7 @@ var DB *gorm.DB
 
 //连接数据库，创建表
 func NewDB(conf *config.MysqlCnfDto) {
-	url := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s", conf.User, conf.Pwd, conf.Host, conf.Port, conf.DbName, conf.Charset)
+	url := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s", conf.User, conf.Pwd, conf.Host, conf.Port, conf.DbName, conf.Charset)
 	// database_connect_string := "root:root@/jsl-share?charset=utf8mb4&parseTime=True&loc=Local"
 
 	var err error
