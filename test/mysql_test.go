@@ -10,7 +10,7 @@ import (
 func Test(t *testing.T) {
 	conf := config.MysqlCnfDto{
 		Host:         "127.0.0.1",
-		Port:         "3306",
+		Port:         3306,
 		User:         "root",
 		Pwd:          "root",
 		DbName:       "test",
